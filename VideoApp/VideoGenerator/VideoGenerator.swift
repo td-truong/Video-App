@@ -33,15 +33,13 @@ class VideoGenerator {
     func process() {
         generateOutputURL()
         updateImagesSize()
-        makeVideo()
+        makeVideo() {
+            self.mergeAudio()
+        }
     }
     
     private func generateOutputURL() {
-        let documentURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let outputDirectory = documentURL
-        self.outputURL = outputDirectory
-            .appendingPathComponent("\(UUID().uuidString)")
-            .appendingPathExtension("mov")
+        self.outputURL = FileManager.generateOutputURL(prefix: "video-gen-")
         print("outputURL", outputURL!)
     }
     
@@ -60,7 +58,7 @@ class VideoGenerator {
         self.images = updatedImages
     }
     
-    private func makeVideo() {
+    private func makeVideo(completion: @escaping () -> Void) {
         guard let outputURL = self.outputURL else { return }
         guard let writer = try? AVAssetWriter(outputURL: outputURL, fileType: .mov) else { return }
         
@@ -97,6 +95,7 @@ class VideoGenerator {
             writerInput.markAsFinished()
             writer.finishWriting {
                 print(Date(), "finished", outputURL)
+                completion()
             }
         }
     }
@@ -184,6 +183,12 @@ class VideoGenerator {
         )
         
         context?.draw(image, in: rect)
+    }
+    
+    private func mergeAudio() {
+        let video = AVURLAsset(url: outputURL)
+        VideoComposer(video: video, audio: audio)
+            .compose()
     }
     
 }

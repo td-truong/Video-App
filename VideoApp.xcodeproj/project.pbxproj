@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BC301191269B559700B89532 /* VideoComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC301190269B559700B89532 /* VideoComposer.swift */; };
+		BC301193269B5AC300B89532 /* FileManager+Exts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC301192269B5AC300B89532 /* FileManager+Exts.swift */; };
 		BC5168A12693449700742A98 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC5168A02693449700742A98 /* AppDelegate.swift */; };
 		BC5168A52693449700742A98 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC5168A42693449700742A98 /* ViewController.swift */; };
 		BC5168AA2693449800742A98 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BC5168A92693449800742A98 /* Assets.xcassets */; };
@@ -17,6 +19,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BC301190269B559700B89532 /* VideoComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoComposer.swift; sourceTree = "<group>"; };
+		BC301192269B5AC300B89532 /* FileManager+Exts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+Exts.swift"; sourceTree = "<group>"; };
 		BC51689D2693449700742A98 /* VideoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VideoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC5168A02693449700742A98 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BC5168A42693449700742A98 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -81,7 +85,9 @@
 			isa = PBXGroup;
 			children = (
 				BCFEE7B62694AD3A00646060 /* VideoGenerator.swift */,
+				BC301190269B559700B89532 /* VideoComposer.swift */,
 				BC56949B2697054F00BE8F28 /* UIView+Exts.swift */,
+				BC301192269B5AC300B89532 /* FileManager+Exts.swift */,
 			);
 			path = VideoGenerator;
 			sourceTree = "<group>";
@@ -156,6 +162,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BC301191269B559700B89532 /* VideoComposer.swift in Sources */,
+				BC301193269B5AC300B89532 /* FileManager+Exts.swift in Sources */,
 				BC56949C2697054F00BE8F28 /* UIView+Exts.swift in Sources */,
 				BCFEE7B72694AD3A00646060 /* VideoGenerator.swift in Sources */,
 				BC5168A52693449700742A98 /* ViewController.swift in Sources */,
