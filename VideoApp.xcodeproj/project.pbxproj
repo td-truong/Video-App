@@ -8,22 +8,24 @@
 
 /* Begin PBXBuildFile section */
 		BC5168A12693449700742A98 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC5168A02693449700742A98 /* AppDelegate.swift */; };
-		BC5168A32693449700742A98 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC5168A22693449700742A98 /* SceneDelegate.swift */; };
 		BC5168A52693449700742A98 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC5168A42693449700742A98 /* ViewController.swift */; };
-		BC5168A82693449700742A98 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BC5168A62693449700742A98 /* Main.storyboard */; };
 		BC5168AA2693449800742A98 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BC5168A92693449800742A98 /* Assets.xcassets */; };
 		BC5168AD2693449800742A98 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BC5168AB2693449800742A98 /* LaunchScreen.storyboard */; };
+		BC56949C2697054F00BE8F28 /* UIView+Exts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC56949B2697054F00BE8F28 /* UIView+Exts.swift */; };
+		BCAAB59926944B58004A5DA0 /* Sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BCAAB59826944B58004A5DA0 /* Sound.mp3 */; };
+		BCFEE7B72694AD3A00646060 /* VideoGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFEE7B62694AD3A00646060 /* VideoGenerator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		BC51689D2693449700742A98 /* VideoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VideoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC5168A02693449700742A98 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		BC5168A22693449700742A98 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		BC5168A42693449700742A98 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		BC5168A72693449700742A98 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		BC5168A92693449800742A98 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BC5168AC2693449800742A98 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BC5168AE2693449800742A98 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BC56949B2697054F00BE8F28 /* UIView+Exts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Exts.swift"; sourceTree = "<group>"; };
+		BCAAB59826944B58004A5DA0 /* Sound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Sound.mp3; sourceTree = "<group>"; };
+		BCFEE7B62694AD3A00646060 /* VideoGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoGenerator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,14 +59,31 @@
 			isa = PBXGroup;
 			children = (
 				BC5168A02693449700742A98 /* AppDelegate.swift */,
-				BC5168A22693449700742A98 /* SceneDelegate.swift */,
 				BC5168A42693449700742A98 /* ViewController.swift */,
-				BC5168A62693449700742A98 /* Main.storyboard */,
-				BC5168A92693449800742A98 /* Assets.xcassets */,
 				BC5168AB2693449800742A98 /* LaunchScreen.storyboard */,
 				BC5168AE2693449800742A98 /* Info.plist */,
+				BCFEE7B52694A5DC00646060 /* VideoGenerator */,
+				BCAAB59726944B3B004A5DA0 /* Resources */,
 			);
 			path = VideoApp;
+			sourceTree = "<group>";
+		};
+		BCAAB59726944B3B004A5DA0 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				BCAAB59826944B58004A5DA0 /* Sound.mp3 */,
+				BC5168A92693449800742A98 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		BCFEE7B52694A5DC00646060 /* VideoGenerator */ = {
+			isa = PBXGroup;
+			children = (
+				BCFEE7B62694AD3A00646060 /* VideoGenerator.swift */,
+				BC56949B2697054F00BE8F28 /* UIView+Exts.swift */,
+			);
+			path = VideoGenerator;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -126,7 +145,7 @@
 			files = (
 				BC5168AD2693449800742A98 /* LaunchScreen.storyboard in Resources */,
 				BC5168AA2693449800742A98 /* Assets.xcassets in Resources */,
-				BC5168A82693449700742A98 /* Main.storyboard in Resources */,
+				BCAAB59926944B58004A5DA0 /* Sound.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,23 +156,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BC56949C2697054F00BE8F28 /* UIView+Exts.swift in Sources */,
+				BCFEE7B72694AD3A00646060 /* VideoGenerator.swift in Sources */,
 				BC5168A52693449700742A98 /* ViewController.swift in Sources */,
 				BC5168A12693449700742A98 /* AppDelegate.swift in Sources */,
-				BC5168A32693449700742A98 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		BC5168A62693449700742A98 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				BC5168A72693449700742A98 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		BC5168AB2693449800742A98 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -288,6 +300,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = VideoApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -306,6 +319,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = VideoApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
