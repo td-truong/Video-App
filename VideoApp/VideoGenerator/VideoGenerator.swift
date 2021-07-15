@@ -63,7 +63,7 @@ class VideoGenerator {
         guard let writer = try? AVAssetWriter(outputURL: outputURL, fileType: .mov) else { return }
         
         let outputSettings: [String: Any] = [
-            AVVideoCodecKey: AVVideoCodecH264,
+            AVVideoCodecKey: AVVideoCodecType.h264,
             AVVideoWidthKey: self.defaultSize.width,
             AVVideoHeightKey: self.defaultSize.height
         ]

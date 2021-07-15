@@ -3,10 +3,14 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5B467695269E9A85003E6840 /* MetalPetal in Frameworks */ = {isa = PBXBuildFile; productRef = 5B467694269E9A85003E6840 /* MetalPetal */; };
+		5B467698269E9AF2003E6840 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B467697269E9AF2003E6840 /* PlayerViewController.swift */; };
+		5B46769C269EE590003E6840 /* Filters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B46769B269EE590003E6840 /* Filters.swift */; };
+		5B63E47B269FDC610043BB77 /* test.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 5B63E47A269FDC610043BB77 /* test.mp4 */; };
 		BC301191269B559700B89532 /* VideoComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC301190269B559700B89532 /* VideoComposer.swift */; };
 		BC301193269B5AC300B89532 /* FileManager+Exts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC301192269B5AC300B89532 /* FileManager+Exts.swift */; };
 		BC5168A12693449700742A98 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC5168A02693449700742A98 /* AppDelegate.swift */; };
@@ -19,6 +23,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5B467697269E9AF2003E6840 /* PlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
+		5B46769B269EE590003E6840 /* Filters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filters.swift; sourceTree = "<group>"; };
+		5B63E47A269FDC610043BB77 /* test.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = test.mp4; path = ../../../test.mp4; sourceTree = "<group>"; };
 		BC301190269B559700B89532 /* VideoComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoComposer.swift; sourceTree = "<group>"; };
 		BC301192269B5AC300B89532 /* FileManager+Exts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+Exts.swift"; sourceTree = "<group>"; };
 		BC51689D2693449700742A98 /* VideoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VideoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -37,12 +44,22 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B467695269E9A85003E6840 /* MetalPetal in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5B467696269E9AB2003E6840 /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				5B467697269E9AF2003E6840 /* PlayerViewController.swift */,
+				5B46769B269EE590003E6840 /* Filters.swift */,
+			);
+			path = Player;
+			sourceTree = "<group>";
+		};
 		BC5168942693449700742A98 = {
 			isa = PBXGroup;
 			children = (
@@ -67,6 +84,7 @@
 				BC5168AB2693449800742A98 /* LaunchScreen.storyboard */,
 				BC5168AE2693449800742A98 /* Info.plist */,
 				BCFEE7B52694A5DC00646060 /* VideoGenerator */,
+				5B467696269E9AB2003E6840 /* Player */,
 				BCAAB59726944B3B004A5DA0 /* Resources */,
 			);
 			path = VideoApp;
@@ -75,6 +93,7 @@
 		BCAAB59726944B3B004A5DA0 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				5B63E47A269FDC610043BB77 /* test.mp4 */,
 				BCAAB59826944B58004A5DA0 /* Sound.mp3 */,
 				BC5168A92693449800742A98 /* Assets.xcassets */,
 			);
@@ -108,6 +127,9 @@
 			dependencies = (
 			);
 			name = VideoApp;
+			packageProductDependencies = (
+				5B467694269E9A85003E6840 /* MetalPetal */,
+			);
 			productName = VideoApp;
 			productReference = BC51689D2693449700742A98 /* VideoApp.app */;
 			productType = "com.apple.product-type.application";
@@ -135,6 +157,9 @@
 				Base,
 			);
 			mainGroup = BC5168942693449700742A98;
+			packageReferences = (
+				5B467693269E9A85003E6840 /* XCRemoteSwiftPackageReference "MetalPetal" */,
+			);
 			productRefGroup = BC51689E2693449700742A98 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -152,6 +177,7 @@
 				BC5168AD2693449800742A98 /* LaunchScreen.storyboard in Resources */,
 				BC5168AA2693449800742A98 /* Assets.xcassets in Resources */,
 				BCAAB59926944B58004A5DA0 /* Sound.mp3 in Resources */,
+				5B63E47B269FDC610043BB77 /* test.mp4 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -163,8 +189,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				BC301191269B559700B89532 /* VideoComposer.swift in Sources */,
+				5B46769C269EE590003E6840 /* Filters.swift in Sources */,
 				BC301193269B5AC300B89532 /* FileManager+Exts.swift in Sources */,
 				BC56949C2697054F00BE8F28 /* UIView+Exts.swift in Sources */,
+				5B467698269E9AF2003E6840 /* PlayerViewController.swift in Sources */,
 				BCFEE7B72694AD3A00646060 /* VideoGenerator.swift in Sources */,
 				BC5168A52693449700742A98 /* ViewController.swift in Sources */,
 				BC5168A12693449700742A98 /* AppDelegate.swift in Sources */,
@@ -307,8 +335,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = Y842PZZF4A;
 				INFOPLIST_FILE = VideoApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -326,8 +355,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = Y842PZZF4A;
 				INFOPLIST_FILE = VideoApp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -361,6 +391,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		5B467693269E9A85003E6840 /* XCRemoteSwiftPackageReference "MetalPetal" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MetalPetal/MetalPetal";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.22.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5B467694269E9A85003E6840 /* MetalPetal */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5B467693269E9A85003E6840 /* XCRemoteSwiftPackageReference "MetalPetal" */;
+			productName = MetalPetal;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = BC5168952693449700742A98 /* Project object */;
 }
