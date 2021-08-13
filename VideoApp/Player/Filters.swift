@@ -2,7 +2,7 @@
 //  Filters.swift
 //  VideoApp
 //
-//  Created by Machintosh on 14/07/2021.
+//  Created by Duy Truong on 14/07/2021.
 //
 
 import UIKit

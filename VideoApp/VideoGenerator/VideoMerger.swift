@@ -1,5 +1,5 @@
 //
-//  VideoComposer.swift
+//  VideoMerger.swift
 //  VideoApp
 //
 //  Created by Duy Truong on 11/07/2021.
@@ -7,7 +7,7 @@
 
 import AVFoundation
 
-class VideoComposer {
+class VideoMerger {
     
     private let video: AVURLAsset
     private let audio: AVURLAsset
@@ -22,7 +22,7 @@ class VideoComposer {
         self.audio = audio
     }
     
-    func compose(completion: @escaping (URL) -> Void) {
+    func merge(outputURL: URL, completion: @escaping (URL) -> Void) {
         // Add track
         guard
             let videoCompositionTrack = composition.addMutableTrack(withMediaType: .video, preferredTrackID: self.videoTrackId),
@@ -48,14 +48,12 @@ class VideoComposer {
         }
         
         // Merge
-        let outputURL = Endpoints.videoMerged
         if let exportSession = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetHighestQuality) {
             exportSession.outputFileType = .mov
             exportSession.outputURL = outputURL
             exportSession.shouldOptimizeForNetworkUse = true
             
             exportSession.exportAsynchronously {
-                print(Date(), "Export status:", exportSession.status == .completed, outputURL)
                 if exportSession.status == .completed {
                     completion(outputURL)
                 }

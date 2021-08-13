@@ -59,18 +59,26 @@ class ViewController: UIViewController {
             images.append(UIImage(named: "image\(i)")!)
         }
         
+//        VideoConfigs.animationEnabled = false
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            VideoGenerator(images: images, audioURL: Bundle.main.url(forResource: "Sound", withExtension: "mp3")!, completion: { [weak self] url in
-                DispatchQueue.main.async {
-                    button.isEnabled = true
-                    button.setTitle("Merge images and audio", for: .normal)
-                    let playerVC = AVPlayerViewController()
-                    playerVC.player = AVPlayer(url: url)
-                    playerVC.player?.play()
-                    self?.navigationController?.pushViewController(playerVC, animated: true)
+            VideoBuilder()
+                .addImages(images)
+                .setAudio(withURL: Bundle.main.url(forResource: "Sound", withExtension: "mp3")!)
+                .generateVideoFromImages()
+                .mergeAudio { [weak self] url in
+                    DispatchQueue.main.async {
+                        button.isEnabled = true
+                        button.setTitle("Merge images and audio", for: .normal)
+                        
+                        if let url = url, let self = self {
+                            let playerVC = AVPlayerViewController()
+                            playerVC.player = AVPlayer(url: url)
+                            playerVC.player?.play()
+                            self.navigationController?.pushViewController(playerVC, animated: true)
+                        }
+                    }
                 }
-            })
-            .process()
         }
     }
     

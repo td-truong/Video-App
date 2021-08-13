@@ -12,14 +12,15 @@
 		5B46769C269EE590003E6840 /* Filters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B46769B269EE590003E6840 /* Filters.swift */; };
 		5B63E47B269FDC610043BB77 /* test.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 5B63E47A269FDC610043BB77 /* test.mp4 */; };
 		5BBA7F4C26C6530300F31F5D /* Endpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BBA7F4B26C6530300F31F5D /* Endpoints.swift */; };
-		BC301191269B559700B89532 /* VideoComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC301190269B559700B89532 /* VideoComposer.swift */; };
+		5BBA7F4E26C6851B00F31F5D /* VideoBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BBA7F4D26C6851B00F31F5D /* VideoBuilder.swift */; };
+		5BBA7F5026C69FD700F31F5D /* VideoCombiner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BBA7F4F26C69FD700F31F5D /* VideoCombiner.swift */; };
+		BC301191269B559700B89532 /* VideoMerger.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC301190269B559700B89532 /* VideoMerger.swift */; };
 		BC5168A12693449700742A98 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC5168A02693449700742A98 /* AppDelegate.swift */; };
 		BC5168A52693449700742A98 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC5168A42693449700742A98 /* ViewController.swift */; };
 		BC5168AA2693449800742A98 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BC5168A92693449800742A98 /* Assets.xcassets */; };
 		BC5168AD2693449800742A98 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BC5168AB2693449800742A98 /* LaunchScreen.storyboard */; };
 		BC56949C2697054F00BE8F28 /* UIView+Exts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC56949B2697054F00BE8F28 /* UIView+Exts.swift */; };
 		BCAAB59926944B58004A5DA0 /* Sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BCAAB59826944B58004A5DA0 /* Sound.mp3 */; };
-		BCFEE7B72694AD3A00646060 /* VideoGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFEE7B62694AD3A00646060 /* VideoGenerator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +28,9 @@
 		5B46769B269EE590003E6840 /* Filters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filters.swift; sourceTree = "<group>"; };
 		5B63E47A269FDC610043BB77 /* test.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = test.mp4; path = ../../../test.mp4; sourceTree = "<group>"; };
 		5BBA7F4B26C6530300F31F5D /* Endpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoints.swift; sourceTree = "<group>"; };
-		BC301190269B559700B89532 /* VideoComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoComposer.swift; sourceTree = "<group>"; };
+		5BBA7F4D26C6851B00F31F5D /* VideoBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoBuilder.swift; sourceTree = "<group>"; };
+		5BBA7F4F26C69FD700F31F5D /* VideoCombiner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCombiner.swift; sourceTree = "<group>"; };
+		BC301190269B559700B89532 /* VideoMerger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoMerger.swift; sourceTree = "<group>"; };
 		BC51689D2693449700742A98 /* VideoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VideoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC5168A02693449700742A98 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BC5168A42693449700742A98 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -36,7 +39,6 @@
 		BC5168AE2693449800742A98 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BC56949B2697054F00BE8F28 /* UIView+Exts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Exts.swift"; sourceTree = "<group>"; };
 		BCAAB59826944B58004A5DA0 /* Sound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Sound.mp3; sourceTree = "<group>"; };
-		BCFEE7B62694AD3A00646060 /* VideoGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoGenerator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,8 +105,9 @@
 		BCFEE7B52694A5DC00646060 /* VideoGenerator */ = {
 			isa = PBXGroup;
 			children = (
-				BCFEE7B62694AD3A00646060 /* VideoGenerator.swift */,
-				BC301190269B559700B89532 /* VideoComposer.swift */,
+				5BBA7F4D26C6851B00F31F5D /* VideoBuilder.swift */,
+				5BBA7F4F26C69FD700F31F5D /* VideoCombiner.swift */,
+				BC301190269B559700B89532 /* VideoMerger.swift */,
 				BC56949B2697054F00BE8F28 /* UIView+Exts.swift */,
 				5BBA7F4B26C6530300F31F5D /* Endpoints.swift */,
 			);
@@ -188,11 +191,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BC301191269B559700B89532 /* VideoComposer.swift in Sources */,
+				5BBA7F5026C69FD700F31F5D /* VideoCombiner.swift in Sources */,
+				BC301191269B559700B89532 /* VideoMerger.swift in Sources */,
 				5B46769C269EE590003E6840 /* Filters.swift in Sources */,
 				BC56949C2697054F00BE8F28 /* UIView+Exts.swift in Sources */,
+				5BBA7F4E26C6851B00F31F5D /* VideoBuilder.swift in Sources */,
 				5B467698269E9AF2003E6840 /* PlayerViewController.swift in Sources */,
-				BCFEE7B72694AD3A00646060 /* VideoGenerator.swift in Sources */,
 				BC5168A52693449700742A98 /* ViewController.swift in Sources */,
 				5BBA7F4C26C6530300F31F5D /* Endpoints.swift in Sources */,
 				BC5168A12693449700742A98 /* AppDelegate.swift in Sources */,
