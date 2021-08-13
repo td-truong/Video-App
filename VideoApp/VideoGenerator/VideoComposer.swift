@@ -22,7 +22,7 @@ class VideoComposer {
         self.audio = audio
     }
     
-    func compose() {
+    func compose(completion: @escaping (URL) -> Void) {
         // Add track
         guard
             let videoCompositionTrack = composition.addMutableTrack(withMediaType: .video, preferredTrackID: self.videoTrackId),
@@ -48,15 +48,19 @@ class VideoComposer {
         }
         
         // Merge
-        let outputURL = FileManager.generateOutputURL(prefix: "video-merge-")
+        let outputURL = Endpoints.videoMerged
         if let exportSession = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetHighestQuality) {
             exportSession.outputFileType = .mov
             exportSession.outputURL = outputURL
             exportSession.shouldOptimizeForNetworkUse = true
             
             exportSession.exportAsynchronously {
-                print("Export status:", exportSession.status == .completed, outputURL)
+                print(Date(), "Export status:", exportSession.status == .completed, outputURL)
+                if exportSession.status == .completed {
+                    completion(outputURL)
+                }
             }
         }
     }
+    
 }

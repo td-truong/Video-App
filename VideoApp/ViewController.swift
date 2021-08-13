@@ -12,8 +12,8 @@ class ViewController: UIViewController {
     let processButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Process", for: .normal)
-        button.addTarget(self, action: #selector(process), for: .touchUpInside)
+        button.setTitle("Merge images and audio", for: .normal)
+        button.addTarget(self, action: #selector(mergeImagesAndAudio(_:)), for: .touchUpInside)
         return button
     }()
     
@@ -50,14 +50,28 @@ class ViewController: UIViewController {
         ])
     }
     
-    @objc private func process() {
+    @objc private func mergeImagesAndAudio(_ button: UIButton) {
+        button.isEnabled = false
+        button.setTitle("Merging...", for: .normal)
+
         var images: [UIImage] = []
         for i in 0...3 {
             images.append(UIImage(named: "image\(i)")!)
         }
         
-        VideoGenerator(images: images, audioURL: Bundle.main.url(forResource: "Sound", withExtension: "mp3")!)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            VideoGenerator(images: images, audioURL: Bundle.main.url(forResource: "Sound", withExtension: "mp3")!, completion: { [weak self] url in
+                DispatchQueue.main.async {
+                    button.isEnabled = true
+                    button.setTitle("Merge images and audio", for: .normal)
+                    let playerVC = AVPlayerViewController()
+                    playerVC.player = AVPlayer(url: url)
+                    playerVC.player?.play()
+                    self?.navigationController?.pushViewController(playerVC, animated: true)
+                }
+            })
             .process()
+        }
     }
     
     @objc private func showPlayer() {

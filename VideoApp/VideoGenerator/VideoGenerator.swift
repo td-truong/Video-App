@@ -14,7 +14,7 @@ class VideoGenerator {
     private let audio: AVURLAsset
     private let imageDuration: CMTime
     
-    private var outputURL: URL!
+    private let outputURL: URL = Endpoints.videoGen
     private let queue = DispatchQueue(label: "videoGeneratorQueue")
     
     private let defaultSize = CGSize(width: 1080, height: 1920)
@@ -22,25 +22,32 @@ class VideoGenerator {
     private let animationFramesPerSecond = 20
     private let animationOffsetPerSecond: CGFloat = 15
     
-    init(images: [UIImage], audioURL: URL) {
-        print(Date(), "Start")
+    private let completionHandler: (URL) -> Void
+    
+    init(images: [UIImage], audioURL: URL, completion: @escaping (URL) -> Void) {
         self.images = images
         self.audio = AVURLAsset(url: audioURL)
 //        self.imageDuration = CMTimeMultiplyByRatio(self.audio.duration, multiplier: 1, divisor: Int32(self.images.count))
         self.imageDuration = CMTime(seconds: 3, preferredTimescale: self.audio.duration.timescale)
+        self.completionHandler = completion
     }
     
     func process() {
-        generateOutputURL()
+        print(Date(), "Start merging")
+        createOutputDirectory()
         updateImagesSize()
         makeVideo() {
             self.mergeAudio()
         }
     }
     
-    private func generateOutputURL() {
-        self.outputURL = FileManager.generateOutputURL(prefix: "video-gen-")
-        print("outputURL", outputURL!)
+    private func createOutputDirectory() {
+        let outputDirectory = Endpoints.mergeVideoDirectory
+        if FileManager.default.fileExists(atPath: outputDirectory.path) {
+            try? FileManager.default.removeItem(at: outputDirectory)
+        }
+        try? FileManager.default.createDirectory(at: outputDirectory, withIntermediateDirectories: true, attributes: nil)
+        print("outputURL", outputURL)
     }
     
     private func updateImagesSize() {
@@ -59,7 +66,6 @@ class VideoGenerator {
     }
     
     private func makeVideo(completion: @escaping () -> Void) {
-        guard let outputURL = self.outputURL else { return }
         guard let writer = try? AVAssetWriter(outputURL: outputURL, fileType: .mov) else { return }
         
         let outputSettings: [String: Any] = [
@@ -83,7 +89,6 @@ class VideoGenerator {
         writerInput.requestMediaDataWhenReady(on: self.queue) {
             var imageIndex = 0
             var presentationTime = CMTime.zero
-            
             while writerInput.isReadyForMoreMediaData && imageIndex < self.images.count {
                 let image = self.images[imageIndex]
                 _ = self.appendPixelBuffer(for: adaptor, image: image, presentationTime: presentationTime)
@@ -94,7 +99,7 @@ class VideoGenerator {
             
             writerInput.markAsFinished()
             writer.finishWriting {
-                print(Date(), "finished", outputURL)
+                print(Date(), "finished", self.outputURL)
                 completion()
             }
         }
@@ -188,7 +193,7 @@ class VideoGenerator {
     private func mergeAudio() {
         let video = AVURLAsset(url: outputURL)
         VideoComposer(video: video, audio: audio)
-            .compose()
+            .compose(completion: completionHandler)
     }
     
 }
