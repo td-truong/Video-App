@@ -14,6 +14,7 @@
 		5BBA7F4E26C6851B00F31F5D /* VideoBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BBA7F4D26C6851B00F31F5D /* VideoBuilder.swift */; };
 		5BBA7F5026C69FD700F31F5D /* VideoCombiner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BBA7F4F26C69FD700F31F5D /* VideoCombiner.swift */; };
 		BC301191269B559700B89532 /* VideoMerger.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC301190269B559700B89532 /* VideoMerger.swift */; };
+		BC329B3F26CB39DE0023C8D7 /* ExportSessionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC329B3E26CB39DE0023C8D7 /* ExportSessionHelper.swift */; };
 		BC5168A12693449700742A98 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC5168A02693449700742A98 /* AppDelegate.swift */; };
 		BC5168A52693449700742A98 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC5168A42693449700742A98 /* ViewController.swift */; };
 		BC5168AA2693449800742A98 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BC5168A92693449800742A98 /* Assets.xcassets */; };
@@ -30,6 +31,7 @@
 		5BBA7F4D26C6851B00F31F5D /* VideoBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoBuilder.swift; sourceTree = "<group>"; };
 		5BBA7F4F26C69FD700F31F5D /* VideoCombiner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCombiner.swift; sourceTree = "<group>"; };
 		BC301190269B559700B89532 /* VideoMerger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoMerger.swift; sourceTree = "<group>"; };
+		BC329B3E26CB39DE0023C8D7 /* ExportSessionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportSessionHelper.swift; sourceTree = "<group>"; };
 		BC51689D2693449700742A98 /* VideoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VideoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC5168A02693449700742A98 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BC5168A42693449700742A98 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 				5BBA7F4F26C69FD700F31F5D /* VideoCombiner.swift */,
 				BC301190269B559700B89532 /* VideoMerger.swift */,
 				BC56949B2697054F00BE8F28 /* UIView+Exts.swift */,
+				BC329B3E26CB39DE0023C8D7 /* ExportSessionHelper.swift */,
 				5BBA7F4B26C6530300F31F5D /* Endpoints.swift */,
 			);
 			path = VideoGenerator;
@@ -193,6 +196,7 @@
 			files = (
 				5BBA7F5026C69FD700F31F5D /* VideoCombiner.swift in Sources */,
 				BC301191269B559700B89532 /* VideoMerger.swift in Sources */,
+				BC329B3F26CB39DE0023C8D7 /* ExportSessionHelper.swift in Sources */,
 				5B46769C269EE590003E6840 /* Filters.swift in Sources */,
 				BC56949C2697054F00BE8F28 /* UIView+Exts.swift in Sources */,
 				5BBA7F4E26C6851B00F31F5D /* VideoBuilder.swift in Sources */,

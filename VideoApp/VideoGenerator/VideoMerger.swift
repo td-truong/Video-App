@@ -48,17 +48,11 @@ class VideoMerger {
         }
         
         // Merge
-        if let exportSession = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetHighestQuality) {
-            exportSession.outputFileType = .mov
-            exportSession.outputURL = outputURL
-            exportSession.shouldOptimizeForNetworkUse = true
-            
-            exportSession.exportAsynchronously {
-                if exportSession.status == .completed {
-                    completion(outputURL)
-                }
-            }
-        }
+        ExportSessionHelper.export(asset: composition,
+                                   outputURL: outputURL,
+                                   onSuccess: {
+                                    completion(outputURL)
+                                   })
     }
     
 }

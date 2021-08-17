@@ -22,6 +22,7 @@ public class VideoBuilder {
     
     private var images: [UIImage] = []
     private var audio: AVURLAsset?
+    private var videos: [AVURLAsset] = []
     private var imageDuration: CMTime {
         guard let audio = audio else { return .zero }
         return CMTime(seconds: 3, preferredTimescale: audio.duration.timescale)
@@ -137,19 +138,13 @@ public class VideoBuilder {
             duration: video.duration,
             videoCompositionTrack: videoCompositionTrack
         )
-        let exportSession = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetHighestQuality)
-        exportSession?.outputFileType = .mov
-        exportSession?.shouldOptimizeForNetworkUse = true
-        exportSession?.videoComposition = videoCompositon
-        exportSession?.outputURL = outputURL
-        
-        exportSession?.exportAsynchronously(completionHandler: {
-            if exportSession?.status == .completed {
-                print(Date(), "outputURL", outputURL)
-            } else if let error = exportSession?.error {
-                print(Date(), error)
-            }            
-        })
+        ExportSessionHelper.export(asset: composition,
+                                   outputURL: outputURL,
+                                   videoComposition: videoCompositon) {
+            print(Date(), "outputURL", outputURL)
+        } onError: { error in
+            print(Date(), error)
+        }
     }
     
     private func scaleAspectFillCroppedVideoComposition(
