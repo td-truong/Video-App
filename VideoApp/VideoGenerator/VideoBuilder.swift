@@ -106,4 +106,91 @@ public class VideoBuilder {
             }
     }
     
+    public func cropVideoWithoutAudio(_ video: AVURLAsset) {
+        print(Date(), "Start cropVideoWithoutAudio")
+        let composition = AVMutableComposition()
+        
+        // Add track
+        guard let videoCompositionTrack = composition
+                .addMutableTrack(withMediaType: .video,
+                                 preferredTrackID: kCMPersistentTrackID_Invalid) else {
+            return
+        }
+        
+        // Add video to track
+        let timeRange = CMTimeRange(start: CMTime.zero, duration: video.duration)
+        guard let videoTrack = video.tracks(withMediaType: .video).first else {
+            return
+        }
+        try? videoCompositionTrack.insertTimeRange(timeRange, of: videoTrack, at: CMTime.zero)
+        
+        // Delete old file
+        let outputURL = Endpoints.videoCropped
+        if FileManager.default.fileExists(atPath: outputURL.path) {
+            try? FileManager.default.removeItem(at: outputURL)
+        }
+        
+        // Export
+        let videoCompositon = scaleAspectFillCroppedVideoComposition(
+            ofVideoTrack: videoTrack,
+            outputSize: VideoConfigs.size,
+            duration: video.duration,
+            videoCompositionTrack: videoCompositionTrack
+        )
+        let exportSession = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetHighestQuality)
+        exportSession?.outputFileType = .mov
+        exportSession?.shouldOptimizeForNetworkUse = true
+        exportSession?.videoComposition = videoCompositon
+        exportSession?.outputURL = outputURL
+        
+        exportSession?.exportAsynchronously(completionHandler: {
+            if exportSession?.status == .completed {
+                print(Date(), "outputURL", outputURL)
+            } else if let error = exportSession?.error {
+                print(Date(), error)
+            }            
+        })
+    }
+    
+    private func scaleAspectFillCroppedVideoComposition(
+        ofVideoTrack videoTrack: AVAssetTrack,
+        outputSize: CGSize,
+        duration: CMTime,
+        videoCompositionTrack: AVMutableCompositionTrack)
+    -> AVMutableVideoComposition {
+        // Calculate the scaleAspectFill transform
+        let naturalSize = videoTrack.naturalSize
+        let naturalRatio = naturalSize.width / naturalSize.height
+        let outputRatio = outputSize.width / outputSize.height
+
+        let scaleFactor: CGFloat
+        var translateDistance: (x: CGFloat, y: CGFloat) = (0, 0)
+        if naturalRatio < outputRatio {
+            scaleFactor = outputSize.width / naturalSize.width
+            translateDistance.y = -(scaleFactor * naturalSize.height - outputSize.height) / 2 / scaleFactor
+        } else {
+            scaleFactor = outputSize.height / naturalSize.height
+            translateDistance.x = -(scaleFactor * naturalSize.width - outputSize.width) / 2 / scaleFactor
+        }
+        let transform = CGAffineTransform.identity
+            .scaledBy(x: scaleFactor, y: scaleFactor)
+            .translatedBy(x: translateDistance.x, y: translateDistance.y)
+        
+        // Init instructions
+        let layerInstruction = AVMutableVideoCompositionLayerInstruction(assetTrack: videoCompositionTrack)
+        layerInstruction.setTransform(transform, at: CMTime.zero)
+        
+        let mainInstructions = AVMutableVideoCompositionInstruction()
+        mainInstructions.timeRange = CMTimeRange(start: CMTime.zero, duration: duration)
+        mainInstructions.layerInstructions = [layerInstruction]
+        
+        // Init videoCompositon
+        let videoCompositon = AVMutableVideoComposition()
+        videoCompositon.renderSize = outputSize
+        videoCompositon.instructions = [mainInstructions]
+        videoCompositon.frameDuration = CMTime(value: 1, timescale: 30) // 30FPS
+        
+        return videoCompositon
+    }
+    
 }

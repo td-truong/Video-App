@@ -16,6 +16,9 @@ enum Endpoints {
     static let videoMerged = mergeVideoDirectory
         .appendingPathComponent("video-merged")
         .appendingPathExtension("mov")
+    static let videoCropped = FileManager.default.documentURL
+        .appendingPathComponent("video-cropped")
+        .appendingPathExtension("mov")
 }
 
 extension FileManager {
