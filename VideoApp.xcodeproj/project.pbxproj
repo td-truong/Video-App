@@ -22,6 +22,8 @@
 		BC56949C2697054F00BE8F28 /* UIView+Exts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC56949B2697054F00BE8F28 /* UIView+Exts.swift */; };
 		BCAAB59926944B58004A5DA0 /* Sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BCAAB59826944B58004A5DA0 /* Sound.mp3 */; };
 		BCB80FBE26C8B99300C39634 /* test.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = BCB80FBD26C8B82300C39634 /* test.mp4 */; };
+		BCBFE2BC26CCF2D700D61768 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBFE2BB26CCF2D700D61768 /* LoadingView.swift */; };
+		BCBFE2BE26CCFD4300D61768 /* CMTime+Exts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBFE2BD26CCFD4300D61768 /* CMTime+Exts.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +43,8 @@
 		BC56949B2697054F00BE8F28 /* UIView+Exts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Exts.swift"; sourceTree = "<group>"; };
 		BCAAB59826944B58004A5DA0 /* Sound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Sound.mp3; sourceTree = "<group>"; };
 		BCB80FBD26C8B82300C39634 /* test.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.mp4; sourceTree = "<group>"; };
+		BCBFE2BB26CCF2D700D61768 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		BCBFE2BD26CCFD4300D61768 /* CMTime+Exts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMTime+Exts.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +89,7 @@
 			children = (
 				BC5168A02693449700742A98 /* AppDelegate.swift */,
 				BC5168A42693449700742A98 /* ViewController.swift */,
+				BCBFE2BB26CCF2D700D61768 /* LoadingView.swift */,
 				BC5168AB2693449800742A98 /* LaunchScreen.storyboard */,
 				BC5168AE2693449800742A98 /* Info.plist */,
 				BCFEE7B52694A5DC00646060 /* VideoGenerator */,
@@ -113,6 +118,7 @@
 				BC56949B2697054F00BE8F28 /* UIView+Exts.swift */,
 				BC329B3E26CB39DE0023C8D7 /* ExportSessionHelper.swift */,
 				5BBA7F4B26C6530300F31F5D /* Endpoints.swift */,
+				BCBFE2BD26CCFD4300D61768 /* CMTime+Exts.swift */,
 			);
 			path = VideoGenerator;
 			sourceTree = "<group>";
@@ -197,12 +203,14 @@
 				5BBA7F5026C69FD700F31F5D /* VideoCombiner.swift in Sources */,
 				BC301191269B559700B89532 /* VideoMerger.swift in Sources */,
 				BC329B3F26CB39DE0023C8D7 /* ExportSessionHelper.swift in Sources */,
+				BCBFE2BC26CCF2D700D61768 /* LoadingView.swift in Sources */,
 				5B46769C269EE590003E6840 /* Filters.swift in Sources */,
 				BC56949C2697054F00BE8F28 /* UIView+Exts.swift in Sources */,
 				5BBA7F4E26C6851B00F31F5D /* VideoBuilder.swift in Sources */,
 				5B467698269E9AF2003E6840 /* PlayerViewController.swift in Sources */,
 				BC5168A52693449700742A98 /* ViewController.swift in Sources */,
 				5BBA7F4C26C6530300F31F5D /* Endpoints.swift in Sources */,
+				BCBFE2BE26CCFD4300D61768 /* CMTime+Exts.swift in Sources */,
 				BC5168A12693449700742A98 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

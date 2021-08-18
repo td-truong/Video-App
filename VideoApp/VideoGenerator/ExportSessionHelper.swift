@@ -17,6 +17,7 @@ class ExportSessionHelper {
                        presetName: String = AVAssetExportPresetHighestQuality,
                        outputFileType: AVFileType = .mov,
                        outputURL: URL,
+                       timeRange: CMTimeRange? = nil,
                        videoComposition: AVVideoComposition? = nil,
                        onSuccess: @escaping () -> Void,
                        onError: ((Error) -> Void)? = nil) {
@@ -28,6 +29,9 @@ class ExportSessionHelper {
         exportSession.outputFileType = outputFileType
         exportSession.outputURL = outputURL
         exportSession.shouldOptimizeForNetworkUse = true
+        if let timeRange = timeRange {
+            exportSession.timeRange = timeRange
+        }
         if let videoComposition = videoComposition {
             exportSession.videoComposition = videoComposition
         }

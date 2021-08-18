@@ -49,7 +49,7 @@ class VideoCombiner {
                                            image: image,
                                            presentationTime: presentationTime,
                                            imageDuration: imageDuration)
-                presentationTime = CMTimeAdd(presentationTime, imageDuration)
+                presentationTime += imageDuration
                 imageIndex += 1
             }
             
@@ -72,7 +72,7 @@ class VideoCombiner {
         let animationFrameCount = VideoConfigs.animationEnabled
             ? VideoConfigs.animationFramesPerSecond * imageSeconds
             : 1
-        let animationTime = CMTimeMultiplyByRatio(imageDuration, multiplier: 1, divisor: Int32(animationFrameCount))
+        let animationTime = imageDuration / Int32(animationFrameCount)
         let animationOffset = VideoConfigs.animationOffsetPerSecond * CGFloat(imageSeconds)
         
         for frameIndex in 0 ... animationFrameCount - 1 {
@@ -102,7 +102,7 @@ class VideoCombiner {
                                 animationOffset: animationOffset)
                 
                 let success = adaptor.append(pixelBuffer, withPresentationTime: presentationTime)
-                presentationTime = CMTimeAdd(presentationTime, animationTime)
+                presentationTime += animationTime
                 return success
             }
             
