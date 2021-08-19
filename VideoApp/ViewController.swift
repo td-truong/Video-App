@@ -10,37 +10,24 @@ import MobileCoreServices
 
 class ViewController: UIViewController {
     
-    let mergeImagesAndAudioButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Merge images and audio", for: .normal)
-        button.addTarget(self, action: #selector(mergeImagesAndAudio(_:)), for: .touchUpInside)
-        return button
-    }()
+    lazy var mergeImagesAndAudioButton = makeButton(title: "Merge images and audio",
+                                                    action: #selector(mergeImagesAndAudio(_:)))
     
-    let mergeVideosAndAudioButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Merge videos and audio", for: .normal)
-        button.addTarget(self, action: #selector(mergeVideosAndAudio(_:)), for: .touchUpInside)
-        return button
-    }()
+    lazy var mergeVideosAndAudioButton = makeButton(title: "Merge videos and audio",
+                                                    action: #selector(mergeVideosAndAudio(_:)))
     
-    let mergeVideosAndAudio2ByImagePickerButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Merge videos and audio by image picker", for: .normal)
-        button.addTarget(self, action: #selector(mergeVideosAndAudioByImagePicker(_:)), for: .touchUpInside)
-        return button
-    }()
+    lazy var mergeVideosAndAudioByImagePickerButton = makeButton(title: "Merge videos and audio by image picker",
+                                                                 action: #selector(mergeVideosAndAudioByImagePicker(_:)))
     
-    let showButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Show", for: .normal)
-        button.addTarget(self, action: #selector(showPlayer), for: .touchUpInside)
-        return button
-    }()
+    lazy var showFilteredPlayerButton = makeButton(title: "Show filter player",
+                                                   action: #selector(showFilteredPlayer))
+    
+    lazy var showQueuePlayerButton = makeButton(title: "Show queue player",
+                                                action: #selector(showQueuePlayer))
+    
+    let testMp4: URL = Bundle.main.url(forResource: "test", withExtension: "mp4")!
+    let test2Mp4: URL = Bundle.main.url(forResource: "test2", withExtension: "mp4")!
+    let soundMp3: URL = Bundle.main.url(forResource: "Sound", withExtension: "mp3")!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,8 +42,9 @@ class ViewController: UIViewController {
         let stackView = UIStackView(arrangedSubviews: [
             mergeImagesAndAudioButton,
             mergeVideosAndAudioButton,
-            mergeVideosAndAudio2ByImagePickerButton,
-            showButton
+            mergeVideosAndAudioByImagePickerButton,
+            showFilteredPlayerButton,
+            showQueuePlayerButton
         ])
         stackView.axis = .vertical
         stackView.spacing = 16
@@ -85,7 +73,7 @@ class ViewController: UIViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             VideoBuilder()
                 .addImages(images)
-                .setAudio(withURL: Bundle.main.url(forResource: "Sound", withExtension: "mp3")!)
+                .setAudio(withURL: self.soundMp3)
                 .generateVideoFromImages()
                 .mergeAudio { [weak self] url in
                     DispatchQueue.main.async {
@@ -103,7 +91,7 @@ class ViewController: UIViewController {
     }
     
     @objc private func mergeVideosAndAudio(_ button: UIButton) {
-        let urls = Array(repeating: Bundle.main.url(forResource: "test", withExtension: "mp4")!, count: 10)
+        let urls = Array(repeating: testMp4, count: 10)
         mergeVideosAndAudio(urls: urls)
     }
     
@@ -112,7 +100,7 @@ class ViewController: UIViewController {
         
         VideoBuilder()
             .addVideos(withURLs: urls)
-            .setAudio(withURL: Bundle.main.url(forResource: "Sound", withExtension: "mp3")!)
+            .setAudio(withURL: soundMp3)
             .generateVideoFromVideos { [weak self] url in
                 DispatchQueue.main.async {
                     self?.hideLoading()
@@ -137,10 +125,30 @@ class ViewController: UIViewController {
         self.present(imagePickerController, animated: true, completion: nil)
     }
     
-    @objc private func showPlayer() {
+    @objc private func showFilteredPlayer() {
         let playerVC = PlayerViewController()
-        playerVC.url = Bundle.main.url(forResource: "test", withExtension: "mp4")!
+        playerVC.url = testMp4
         navigationController?.pushViewController(playerVC, animated: true)
+    }
+    
+    @objc private func showQueuePlayer() {
+        let videoURLs = [testMp4, test2Mp4]
+        let playerItems: [AVPlayerItem] = videoURLs.map { AVPlayerItem(url: $0) }
+        let queuePlayerItems = playerItems.map { QueuePlayerItem(item: $0, startAt: 3, endAt: 6) }
+        
+        let playerVC = QueuePlayerController()
+        playerVC.queuePlayerItems = queuePlayerItems
+        playerVC.player.play()
+        
+        navigationController?.pushViewController(playerVC, animated: true)
+    }
+    
+    func makeButton(title: String, action: Selector) -> UIButton {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle(title, for: .normal)
+        button.addTarget(self, action: action, for: .touchUpInside)
+        return button
     }
     
 }
