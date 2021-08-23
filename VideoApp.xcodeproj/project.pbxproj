@@ -26,6 +26,7 @@
 		BCB80FBE26C8B99300C39634 /* test.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = BCB80FBD26C8B82300C39634 /* test.mp4 */; };
 		BCBFE2BC26CCF2D700D61768 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBFE2BB26CCF2D700D61768 /* LoadingView.swift */; };
 		BCBFE2BE26CCFD4300D61768 /* CMTime+Exts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBFE2BD26CCFD4300D61768 /* CMTime+Exts.swift */; };
+		BCC1757126CE115C0049E1CA /* ImagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC1757026CE115C0049E1CA /* ImagesViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,6 +50,7 @@
 		BCB80FBD26C8B82300C39634 /* test.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.mp4; sourceTree = "<group>"; };
 		BCBFE2BB26CCF2D700D61768 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		BCBFE2BD26CCFD4300D61768 /* CMTime+Exts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMTime+Exts.swift"; sourceTree = "<group>"; };
+		BCC1757026CE115C0049E1CA /* ImagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +71,7 @@
 				5B467697269E9AF2003E6840 /* PlayerViewController.swift */,
 				5B46769B269EE590003E6840 /* Filters.swift */,
 				BC15434E26CD0E2B000936FF /* QueuePlayerController.swift */,
+				BCC1757026CE115C0049E1CA /* ImagesViewController.swift */,
 			);
 			path = Player;
 			sourceTree = "<group>";
@@ -215,6 +218,7 @@
 				BC56949C2697054F00BE8F28 /* UIView+Exts.swift in Sources */,
 				5BBA7F4E26C6851B00F31F5D /* VideoBuilder.swift in Sources */,
 				5B467698269E9AF2003E6840 /* PlayerViewController.swift in Sources */,
+				BCC1757126CE115C0049E1CA /* ImagesViewController.swift in Sources */,
 				BC15434F26CD0E2B000936FF /* QueuePlayerController.swift in Sources */,
 				BC5168A52693449700742A98 /* ViewController.swift in Sources */,
 				5BBA7F4C26C6530300F31F5D /* Endpoints.swift in Sources */,

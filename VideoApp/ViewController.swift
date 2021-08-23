@@ -133,13 +133,11 @@ class ViewController: UIViewController {
     
     @objc private func showQueuePlayer() {
         let videoURLs = [testMp4, test2Mp4]
-        let playerItems: [AVPlayerItem] = videoURLs.map { AVPlayerItem(url: $0) }
-        let queuePlayerItems = playerItems.map { QueuePlayerItem(item: $0, startAt: 3, endAt: 6) }
+        let videoItems: [AVPlayerItem] = videoURLs.map { AVPlayerItem(url: $0) }
+        let queueVideoItems = videoItems.map { QueuePlayerItem(item: $0, startAt: 3, endAt: 6) }
+        let audioItem = AVPlayerItem(url: soundMp3)
         
-        let playerVC = QueuePlayerController()
-        playerVC.queuePlayerItems = queuePlayerItems
-        playerVC.player.play()
-        
+        let playerVC = QueuePlayerController(videoItems: queueVideoItems, audioItem: audioItem)        
         navigationController?.pushViewController(playerVC, animated: true)
     }
     

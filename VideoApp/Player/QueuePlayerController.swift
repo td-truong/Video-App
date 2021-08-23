@@ -10,58 +10,81 @@ import AVFoundation
 
 class QueuePlayerController: UIViewController {
     
-    private(set) var player: AVQueuePlayer!
-    var queuePlayerItems: [QueuePlayerItem] = [] {
-        didSet {
-            guard !queuePlayerItems.isEmpty else {
-                return
-            }
-            
-            let playerItems: [AVPlayerItem] = queuePlayerItems.map { queueItem in
-                queueItem.seekToStartAt()
-                queueItem.setEndAt()
-                return queueItem.item
-            }
-            player = AVQueuePlayer(items: playerItems)
-        }
-    }
+    private let videosPlayer: AVQueuePlayer
+    private let audioPlayer: AVPlayer
+    
+    private let videoItems: [QueuePlayerItem]
+    
+    var autoPlay = true
     
     private var itemIndex = 0
+    private var timer: Timer?
+    
+    init(videoItems: [QueuePlayerItem], audioItem: AVPlayerItem?) {
+        self.videoItems = videoItems
+        self.videosPlayer = AVQueuePlayer(playerItem: videoItems.first?.item)
+        self.audioPlayer = AVPlayer(playerItem: audioItem)
+        super.init(nibName: nil, bundle: nil)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        setupPlayers()
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(handleLoopItems(_:)),
                                                name: .AVPlayerItemDidPlayToEndTime,
                                                object: nil)
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { _ in
+            print(self.videosPlayer.currentTime().seconds)
+        })
     }
     
-    deinit {
+    override func viewWillDisappear(_ animated: Bool) {
         NotificationCenter.default.removeObserver(self)
+        timer?.invalidate()
     }
     
     private func setupViews() {
-        guard let player = player else {
-            return
-        }
+        view.backgroundColor = .black
         
-        let playerLayer = AVPlayerLayer(player: player)
+        let playerLayer = AVPlayerLayer(player: videosPlayer)
         playerLayer.frame = view.bounds
         playerLayer.videoGravity = .resizeAspectFill
         view.layer.addSublayer(playerLayer)
     }
     
-    @objc private func handleLoopItems(_ notification: Notification) {
-        let nextIndex = (itemIndex == queuePlayerItems.count - 1) ? 0 : itemIndex + 1
-        if player.items().count == 1 {
-            let queueItem = queuePlayerItems[nextIndex]
-            queueItem.seekToStartAt()
-            player.advanceToNextItem()
-            player.insert(queueItem.item, after: nil)
+    private func setupPlayers() {
+        for item in videoItems {
+            item.seekToStartAt()
+            item.setEndAt()
         }
         
+        videosPlayer.isMuted = true
+        
+        if autoPlay {
+            videosPlayer.play()
+            audioPlayer.play()
+        }
+    }
+    
+    @objc private func handleLoopItems(_ notification: Notification) {
+        let nextIndex = (itemIndex == videoItems.count - 1) ? 0 : itemIndex + 1
+        let nextItem = videoItems[nextIndex]
+        
+        nextItem.seekToStartAt()
+        videosPlayer.advanceToNextItem()
+        videosPlayer.insert(nextItem.item, after: nil)
+        
         itemIndex = nextIndex
+    }
+    
+    deinit {
+        print("Deinit")
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
 }
