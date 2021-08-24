@@ -22,11 +22,13 @@
 		BC5168AA2693449800742A98 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BC5168A92693449800742A98 /* Assets.xcassets */; };
 		BC5168AD2693449800742A98 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BC5168AB2693449800742A98 /* LaunchScreen.storyboard */; };
 		BC56949C2697054F00BE8F28 /* UIView+Exts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC56949B2697054F00BE8F28 /* UIView+Exts.swift */; };
+		BC9274F026D0A08900957F1C /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = BC9274EF26D0A08900957F1C /* RxSwift */; };
+		BC9274F226D0A08900957F1C /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = BC9274F126D0A08900957F1C /* RxRelay */; };
+		BC9274F426D0A08900957F1C /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = BC9274F326D0A08900957F1C /* RxCocoa */; };
 		BCAAB59926944B58004A5DA0 /* Sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BCAAB59826944B58004A5DA0 /* Sound.mp3 */; };
 		BCB80FBE26C8B99300C39634 /* test.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = BCB80FBD26C8B82300C39634 /* test.mp4 */; };
 		BCBFE2BC26CCF2D700D61768 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBFE2BB26CCF2D700D61768 /* LoadingView.swift */; };
 		BCBFE2BE26CCFD4300D61768 /* CMTime+Exts.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBFE2BD26CCFD4300D61768 /* CMTime+Exts.swift */; };
-		BCC1757126CE115C0049E1CA /* ImagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC1757026CE115C0049E1CA /* ImagesViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,7 +52,6 @@
 		BCB80FBD26C8B82300C39634 /* test.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.mp4; sourceTree = "<group>"; };
 		BCBFE2BB26CCF2D700D61768 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		BCBFE2BD26CCFD4300D61768 /* CMTime+Exts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CMTime+Exts.swift"; sourceTree = "<group>"; };
-		BCC1757026CE115C0049E1CA /* ImagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +59,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BC9274F226D0A08900957F1C /* RxRelay in Frameworks */,
+				BC9274F026D0A08900957F1C /* RxSwift in Frameworks */,
+				BC9274F426D0A08900957F1C /* RxCocoa in Frameworks */,
 				5B467695269E9A85003E6840 /* MetalPetal in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -71,7 +75,6 @@
 				5B467697269E9AF2003E6840 /* PlayerViewController.swift */,
 				5B46769B269EE590003E6840 /* Filters.swift */,
 				BC15434E26CD0E2B000936FF /* QueuePlayerController.swift */,
-				BCC1757026CE115C0049E1CA /* ImagesViewController.swift */,
 			);
 			path = Player;
 			sourceTree = "<group>";
@@ -150,6 +153,9 @@
 			name = VideoApp;
 			packageProductDependencies = (
 				5B467694269E9A85003E6840 /* MetalPetal */,
+				BC9274EF26D0A08900957F1C /* RxSwift */,
+				BC9274F126D0A08900957F1C /* RxRelay */,
+				BC9274F326D0A08900957F1C /* RxCocoa */,
 			);
 			productName = VideoApp;
 			productReference = BC51689D2693449700742A98 /* VideoApp.app */;
@@ -180,6 +186,7 @@
 			mainGroup = BC5168942693449700742A98;
 			packageReferences = (
 				5B467693269E9A85003E6840 /* XCRemoteSwiftPackageReference "MetalPetal" */,
+				BC9274EE26D0A08900957F1C /* XCRemoteSwiftPackageReference "RxSwift" */,
 			);
 			productRefGroup = BC51689E2693449700742A98 /* Products */;
 			projectDirPath = "";
@@ -218,7 +225,6 @@
 				BC56949C2697054F00BE8F28 /* UIView+Exts.swift in Sources */,
 				5BBA7F4E26C6851B00F31F5D /* VideoBuilder.swift in Sources */,
 				5B467698269E9AF2003E6840 /* PlayerViewController.swift in Sources */,
-				BCC1757126CE115C0049E1CA /* ImagesViewController.swift in Sources */,
 				BC15434F26CD0E2B000936FF /* QueuePlayerController.swift in Sources */,
 				BC5168A52693449700742A98 /* ViewController.swift in Sources */,
 				5BBA7F4C26C6530300F31F5D /* Endpoints.swift in Sources */,
@@ -429,6 +435,14 @@
 				minimumVersion = 1.22.0;
 			};
 		};
+		BC9274EE26D0A08900957F1C /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactiveX/RxSwift";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 6.2.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -436,6 +450,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5B467693269E9A85003E6840 /* XCRemoteSwiftPackageReference "MetalPetal" */;
 			productName = MetalPetal;
+		};
+		BC9274EF26D0A08900957F1C /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BC9274EE26D0A08900957F1C /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxSwift;
+		};
+		BC9274F126D0A08900957F1C /* RxRelay */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BC9274EE26D0A08900957F1C /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxRelay;
+		};
+		BC9274F326D0A08900957F1C /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BC9274EE26D0A08900957F1C /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
