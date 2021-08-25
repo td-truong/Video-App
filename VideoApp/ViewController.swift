@@ -40,10 +40,10 @@ class ViewController: UIViewController {
         view.backgroundColor = .white
         
         let stackView = UIStackView(arrangedSubviews: [
-            mergeImagesAndAudioButton,
-            mergeVideosAndAudioButton,
-            mergeVideosAndAudioByImagePickerButton,
-            showFilteredPlayerButton,
+//            mergeImagesAndAudioButton,
+//            mergeVideosAndAudioButton,
+//            mergeVideosAndAudioByImagePickerButton,
+//            showFilteredPlayerButton,
             showQueuePlayerButton
         ])
         stackView.axis = .vertical
@@ -132,12 +132,16 @@ class ViewController: UIViewController {
     }
     
     @objc private func showQueuePlayer() {
-        let videoURLs = [testMp4, test2Mp4]
-        let videoItems: [AVPlayerItem] = videoURLs.map { AVPlayerItem(url: $0) }
-        let queueVideoItems = videoItems.map { QueuePlayerItem(item: $0, startAt: 0, endAt: 0) } // TODO
+        let queueItems: [QueuePlayerItem] = [
+            VideoPlayerItem(item: AVPlayerItem(url: testMp4), length: 9999),
+            ImagePlayerItem(image: UIImage(named: "image0")!, length: 6),
+            VideoPlayerItem(item: AVPlayerItem(url: test2Mp4), length: 9999),
+            ImagePlayerItem(image: UIImage(named: "image1")!, length: 9),
+            VideoPlayerItem(item: AVPlayerItem(url: testMp4), length: 9999)
+        ]
         let audioItem = AVPlayerItem(url: soundMp3)
-        
-        let playerVC = QueuePlayerController(videoItems: queueVideoItems, audioItem: audioItem)        
+
+        let playerVC = QueuePlayerController(items: queueItems, audioItem: audioItem)
         navigationController?.pushViewController(playerVC, animated: true)
     }
     

@@ -12,6 +12,8 @@ import RxCocoa
 
 class QueuePlayerController: UIViewController {
     
+    static let imageScaleFactor = 1.25
+    
     private lazy var progressSlider: UISlider = {
         let slider = UISlider()
         slider.translatesAutoresizingMaskIntoConstraints = false
@@ -28,27 +30,52 @@ class QueuePlayerController: UIViewController {
         return label
     }()
     
+    private lazy var playerLayer: AVPlayerLayer = {
+        let playerLayer = AVPlayerLayer(player: videosPlayer)
+        playerLayer.frame = view.bounds
+        playerLayer.videoGravity = .resizeAspectFill
+        return playerLayer
+    }()
+    
+    private lazy var imageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        return imageView
+    }()
+    
+    private lazy var imageAnimation: CABasicAnimation =  {
+        let animation = CABasicAnimation(keyPath: "transform.scale")
+        animation.fromValue = 1
+        animation.toValue = QueuePlayerController.imageScaleFactor
+        animation.delegate = self
+        return animation
+    }()
+    
     private let disposeBag = DisposeBag()
     
-    private let videoItems: Observable<[QueuePlayerItem]>
+    private let items: Observable<[QueuePlayerItem]>
     private let videosPlayer: AVQueuePlayer
     private let audioPlayer: AVPlayer
     
     private let videoItemIndex = BehaviorSubject<Int>(value: 0)
-    private let playerTime = PublishSubject<CMTime>()
+    private let currentItemTime = BehaviorSubject<Double>(value: 0)
+    private let imageAnimationDidEnd = PublishSubject<Void>()
     
     var autoPlay = true
     
     private var totalLength: Observable<Double> {
-        return videoItems.map { items in
+        return items.map { items in
             items.reduce(0) { $0 + $1.length }
         }
     }
     
-    private var timeObserverToken: Any?
+    private var videoTimeObserverToken: Any?
+    private var imageTimeSubscriptions: [Disposable] = []
     
-    init(videoItems: [QueuePlayerItem], audioItem: AVPlayerItem?) {
-        self.videoItems = Observable.just(videoItems)
+    init(items: [QueuePlayerItem], audioItem: AVPlayerItem?) {
+        self.items = Observable.just(items)
         self.videosPlayer = AVQueuePlayer()
         self.audioPlayer = AVPlayer(playerItem: audioItem)
         super.init(nibName: nil, bundle: nil)
@@ -62,16 +89,19 @@ class QueuePlayerController: UIViewController {
     }
     
     private func setupViews() {
+        title = "Video"
         view.backgroundColor = .black
         
-        let playerLayer = AVPlayerLayer(player: videosPlayer)
-        playerLayer.frame = view.bounds
-        playerLayer.videoGravity = .resizeAspectFill
         view.layer.addSublayer(playerLayer)
         
+        view.addSubview(imageView)
         view.addSubview(progressSlider)
         view.addSubview(maximumSliderLabel)
         NSLayoutConstraint.activate([
+            imageView.topAnchor.constraint(equalTo: view.topAnchor),
+            imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            imageView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             progressSlider.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
             progressSlider.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),
             progressSlider.heightAnchor.constraint(equalToConstant: 30),
@@ -82,33 +112,81 @@ class QueuePlayerController: UIViewController {
     }
     
     private func setupSubscriptions() {
-        videoItemIndex
+        let videoItem = videoItemIndex
             .distinctUntilChanged()
-            .withLatestFrom(videoItems) { (index: $0, items: $1) }
-            .subscribe(onNext: { [weak self] index, items in
-                let item = items[index]
-                self?.videosPlayer.advanceToNextItem()
-                self?.videosPlayer.insert(item.item, after: nil)
+            .withLatestFrom(items) { (index: $0, items: $1) }
+            .map { (index, items) in items[index] }
+            .share()
+            
+        videoItem
+            .subscribe(onNext: { [weak self] item in
+                if let item = item as? VideoPlayerItem {
+                    self?.videosPlayer.advanceToNextItem()
+                    self?.videosPlayer.insert(item.item, after: nil)
+                } else if let item = item as? ImagePlayerItem {
+                    // TODO
+                }
             })
             .disposed(by: disposeBag)
         
-        NotificationCenter.default.rx
-            .notification(.AVPlayerItemDidPlayToEndTime)
+        videoItem
+            .map { $0 is VideoPlayerItem }
+            .map { !$0 }
+            .asDriver(onErrorJustReturn: true)
+            .drive(playerLayer.rx.isHidden)
+            .disposed(by: disposeBag)
+        
+        videoItem
+            .map { $0 is ImagePlayerItem }
+            .map { !$0 }
+            .asDriver(onErrorJustReturn: true)
+            .drive(imageView.rx.isHidden)
+            .disposed(by: disposeBag)
+        
+        Observable<Void>
+            .merge(
+                NotificationCenter.default.rx
+                    .notification(.AVPlayerItemDidPlayToEndTime)
+                    .map { _ in () },
+                imageAnimationDidEnd
+            )
             .withLatestFrom(videoItemIndex)
-            .withLatestFrom(videoItems) { (index: $0, items: $1) }
+            .withLatestFrom(items) { (index: $0, items: $1) }
             .filter { $0 < $1.count - 1 }
             .map { (index: $0 + 1, items: $1) }
-            .subscribe(onNext: { [weak self] index, items in
-                let item = items[index]
-                item.seekTo(seconds: 0) // TODO
-                self?.videoItemIndex.onNext(index)
+            .map { index, items in (index, items[index]) }
+            .subscribe(onNext: { [weak self] index, item in
+                if let videoItem = item as? VideoPlayerItem {
+                    videoItem.seekTo(seconds: 0)
+                    self?.videosPlayer.play()
+                    self?.videoItemIndex.onNext(index)
+                } else if let imageItem = item as? ImagePlayerItem {
+                    self?.videosPlayer.pause()
+                    self?.videoItemIndex.onNext(index)
+                    self?.animateImage(imageItem, startAt: 0)
+                }
             })
             .disposed(by: disposeBag)
         
-        timeObserverToken = videosPlayer
+        videoTimeObserverToken = videosPlayer
             .addPeriodicTimeObserver(forInterval: CMTime(seconds: 1, preferredTimescale: 30), queue: .main) { [weak self] time in
-                self?.playerTime.onNext(time)
+                self?.currentItemTime.onNext(time.seconds)
             }
+        
+        let playerTime = currentItemTime
+            .debug("playerTime")
+            .withLatestFrom(items) { (time: $0, items: $1) }
+            .compactMap { [weak self] time, items -> Double? in
+                guard let videoItemIndex = try? self?.videoItemIndex.value() else { return nil }
+                
+                var totalLengthBeforeCurrentItem = 0.0
+                for index in 0..<videoItemIndex {
+                    totalLengthBeforeCurrentItem += items[index].length
+                }
+                let playedLength = totalLengthBeforeCurrentItem + time
+                return playedLength
+            }
+            .share()
         
         let progressSliderSliding = Observable<Bool>
             .merge([
@@ -120,36 +198,18 @@ class QueuePlayerController: UIViewController {
                     .map { _ in false }
             ])
             .startWith(false)
-        
-        let playerProgress = playerTime
-            .withLatestFrom(videoItems) { (time: $0, items: $1) }
-            .withLatestFrom(totalLength) { (time: $0.time, items: $0.items, totalLength: $1) }
-            .compactMap { [weak self] time, items, totalLength -> Float? in
-                guard let videoItemIndex = try? self?.videoItemIndex.value() else { return nil }
-                
-                var totalLengthBeforeCurrentItem = 0.0
-                for index in 0..<videoItemIndex {
-                    totalLengthBeforeCurrentItem += items[index].length
-                }
-                let playedLength = totalLengthBeforeCurrentItem + time.seconds
-                
-                let progress = playedLength / totalLength
-                return Float(progress)
-            }
-            .share()
-        
-        playerProgress
-            .withLatestFrom(progressSliderSliding) { (time: $0, sliding: $1) }
+ 
+        playerTime
+            .withLatestFrom(totalLength) { playedLength, totalLength in Float(playedLength / totalLength) }
+            .withLatestFrom(progressSliderSliding) { (progress: $0, sliding: $1) }
             .filter { !$0.sliding }
             .map { time, _ in time }
             .asDriver(onErrorJustReturn: 0.0)
             .drive(progressSlider.rx.value)
             .disposed(by: disposeBag)
         
-        playerProgress
-            .withLatestFrom(totalLength) { (progress: $0, totalLength: $1) }
-            .map { (playedLength: Double($0) * $1, totalLength: $1) }
-            .map { playedLength, totalLength in
+        playerTime
+            .withLatestFrom(totalLength) { playedLength, totalLength in
                 let playedText = Self.convertSecondsToMinutesAndSeconds(playedLength)
                 let totalText = Self.convertSecondsToMinutesAndSeconds(totalLength)
                 return "\(playedText) / \(totalText)"
@@ -162,11 +222,11 @@ class QueuePlayerController: UIViewController {
             .debounce(.milliseconds(200), scheduler: MainScheduler.instance)
             .withLatestFrom(totalLength) { (value: $0, totalLength: $1) }
             .map { Double($0) * $1 }
-            .withLatestFrom(videoItems) { (playedLength: $0, items: $1) }
+            .withLatestFrom(items) { (playedLength: $0, items: $1) }
             .subscribe(onNext: { [weak self] playedLength, items in
                 var seekItemIndex = 0
                 var seekItemSeconds = 0.0
-                
+
                 var totalLengthBeforeSeekItem = 0.0
                 for (index, item) in items.enumerated() {
                     if totalLengthBeforeSeekItem + item.length > playedLength {
@@ -177,10 +237,17 @@ class QueuePlayerController: UIViewController {
                         totalLengthBeforeSeekItem += item.length
                     }
                 }
-                
+
                 let seekItem = items[seekItemIndex]
-                seekItem.seekTo(seconds: seekItemSeconds)
-                self?.videoItemIndex.onNext(seekItemIndex)
+                if let videoItem = seekItem as? VideoPlayerItem {
+                    videoItem.seekTo(seconds: seekItemSeconds)
+                    self?.videosPlayer.play()
+                    self?.videoItemIndex.onNext(seekItemIndex)
+                } else if let imageItem = seekItem as? ImagePlayerItem {
+                    self?.videosPlayer.pause()
+                    self?.videoItemIndex.onNext(seekItemIndex)
+                    self?.animateImage(imageItem, startAt: seekItemSeconds)
+                }
             })
             .disposed(by: disposeBag)
     }
@@ -195,18 +262,105 @@ class QueuePlayerController: UIViewController {
         }
     }
     
+    private func animateImage(_ item: ImagePlayerItem, startAt: Double = 0) {
+        removeImageAnimation()
+        self.imageView.image = item.image
+        
+        imageAnimation.duration = item.length - startAt
+        imageAnimation.fromValue = (startAt / item.length)
+            * (QueuePlayerController.imageScaleFactor - 1) + 1
+        imageView.layer.add(imageAnimation, forKey: nil)
+        
+        if startAt == 0 {
+//            currentItemTime.onNext(0)
+        }
+        
+//        if item.length <= ceil(startAt) {
+//            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(Int(1000 * (item.length - startAt)))) {
+//                self.currentItemTime.onNext(item.length)
+//            }
+//        } else {
+//            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(Int(1000 * (ceil(startAt) - startAt)))) {
+//                var playedLength = ceil(startAt)
+//                ///Timer
+//                while playedLength < item.length {
+//                    self.currentItemTime.onNext(playedLength)
+//                    playedLength += 1
+//                }
+//                playedLength -= 1
+//                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(Int(1000 * (item.length - playedLength)))) {
+//                    self.currentItemTime.onNext(item.length)
+//                }
+//            }
+//        }
+        
+        if item.length <= ceil(startAt) {
+            let subscription = Observable.just(item.length)
+                .delay(.milliseconds(Int(1000 * (item.length - startAt))), scheduler: MainScheduler.instance)
+                .subscribe(onNext: { [weak self] length in
+                    self?.currentItemTime.onNext(length)
+                })
+            imageTimeSubscriptions.append(subscription)
+        } else {
+            let subscription = Observable<Int>
+                .interval(.seconds(1), scheduler: MainScheduler.instance)
+                .delay(.milliseconds(Int(1000 * (ceil(startAt) - startAt))), scheduler: MainScheduler.instance)
+                .startWith(Int(ceil(startAt)))
+                .take(Int(floor(item.length) - ceil(startAt)) + 1)
+                .subscribe(onNext: { [weak self] element in
+                    self?.currentItemTime.onNext(Double(Int(ceil(startAt)) + element + 1))
+                }, onCompleted: { [weak self] in
+                    guard item.length > floor(item.length) else { return }
+                    let subscription = Observable.just(item.length)
+                        .delay(.milliseconds(Int(1000 * (item.length - floor(item.length)))), scheduler: MainScheduler.instance)
+                        .subscribe(onNext: { [weak self] length in
+                            self?.currentItemTime.onNext(length)
+                        })
+                    self?.imageTimeSubscriptions.append(subscription)
+                })
+            imageTimeSubscriptions.append(subscription)
+        }
+        
+//        let secondsToNextTimeEmitted = min(item.length, ceil(startAt)) - startAt
+//        let timeEmittedTimes = item.length > ceil(startAt)
+//            ? lround(floor(item.length) - ceil(startAt)) + 1
+//            : 0
+//        Observable<Int>
+//            .interval(.seconds(1), scheduler: MainScheduler.instance)
+//            //            .startWith(Int(ceil(startAt)))
+//            .startWith(0)
+//            .delay(.milliseconds(Int(1000 * secondsToNextTimeEmitted)), scheduler: MainScheduler.instance)
+//            .take(timeEmittedTimes)
+//            .subscribe(onNext: { [weak self] element in
+//                self?.currentItemTime.onNext(Double(Int(ceil(startAt)) + element + 1))
+//            }, onCompleted: { [weak self] in
+//                let after = item.length > ceil(startAt) ? item.length - ceil(startAt) : item.length - startAt
+//                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(Int(1000 * after))) {
+//                    self?.currentItemTime.onNext(item.length)
+//                }
+//            })
+    }
+    
+    private func removeImageAnimation() {
+        self.imageView.layer.removeAllAnimations()
+        imageTimeSubscriptions.forEach { $0.dispose() }
+        imageTimeSubscriptions.removeAll()
+    }
+    
     private static func convertSecondsToMinutesAndSeconds(_ seconds: Double) -> String {
-        let seconds = Int(seconds)
+        let seconds = lround(seconds)
         let s = seconds % 60
         let m = seconds / 60
         return "\(String(format: "%02d", m)):\(String(format: "%02d", s))"
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        if let token = timeObserverToken {
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if let token = videoTimeObserverToken {
             videosPlayer.removeTimeObserver(token)
         }
+        imageTimeSubscriptions.forEach { $0.dispose() }
+        imageAnimation.delegate = nil
     }
     
     deinit {
@@ -219,41 +373,9 @@ class QueuePlayerController: UIViewController {
     
 }
 
-struct QueuePlayerItem {
-    var item: AVPlayerItem
-    var startAt: Double
-    var endAt: Double
-    
-    var length: Double {
-        //        return endAt - startAt
-        return item.asset.duration.seconds // TODO
+extension QueuePlayerController: CAAnimationDelegate {
+    func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+        imageAnimationDidEnd.onNext(())
+        removeImageAnimation()
     }
-    
-    private var timescale: CMTimeScale {
-        item.asset.duration.timescale
-    }
-    
-    private var startTime: CMTime {
-        CMTime(seconds: startAt, preferredTimescale: timescale)
-    }
-    
-    private var endTime: CMTime {
-        CMTime(seconds: endAt, preferredTimescale: timescale)
-    }
-    
-    /// Call every item starts playing
-    func seekToStartAt() {
-        item.seek(to: startTime, completionHandler: nil)
-    }
-    
-    func seekTo(seconds: Double) {
-        let time = CMTime(seconds: seconds, preferredTimescale: timescale)
-        item.seek(to: time, completionHandler: nil)
-    }
-    
-    /// Call 1 time at first
-    func setEndAt() {
-        item.forwardPlaybackEndTime = endTime
-    }
-    
 }
